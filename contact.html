@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Jing // Yu-Jing Chen</title>
+<meta name="description" content="Contact Yu-Jing Chen.">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css?v=mu9zuekf">
+</head>
+<body>
+
+<header>
+  <a class="site-name" href="/">Jing // Yu-Jing Chen</a>
+  <nav>
+    <div class="nav-item" id="workItem">
+      <a class="nav-link" id="workToggle" href="/work.html">Work</a>
+      <div class="dropdown">
+        <a href="/work/installation.html">Installation</a>
+        <a href="/work/lighting.html">Lighting Design</a>
+        <a href="/work/visual.html">R&amp;D</a>
+      </div>
+    </div>
+    <div class="nav-item"><a class="nav-link" href="/about.html">About</a></div>
+    <div class="nav-item"><a class="nav-link active" href="/contact.html">Contact</a></div>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="contact-layout">
+    <div class="contact-main">
+      <div class="page-title">Contact</div>
+      <div class="prose">
+    <p>Feel free to reach out with inquiries, collaborations, or project questions.</p>
+
+    <form id="contactForm" class="contact-form" action="https://formspree.io/f/mrewjqvr" method="POST">
+      <label>
+        Name
+        <input type="text" name="name" required>
+      </label>
+      <label>
+        Email
+        <input type="email" name="email" required>
+      </label>
+      <label>
+        Message
+        <textarea name="message" rows="6" required></textarea>
+      </label>
+      <button type="submit">Send</button>
+    </form>
+
+    <div id="formStatus" class="form-status" role="status" aria-live="polite"></div>
+
+      </div>
+    </div>
+    <aside class="contact-side">
+    <div class="page-title side-title">Email</div>
+    <div class="side-text"><a class="icon-link" href="mailto:planetmarsno34@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6.5L20.5 7"/></svg><span>planetmarsno34@gmail.com</span></a></div>
+    <div class="page-title side-title">Follow me</div>
+    <div class="side-text side-icons">
+      <a class="icon-link" href="https://www.instagram.com/no3_saturn" target="_blank" rel="noopener" aria-label="Instagram @no3_saturn" title="Instagram"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="0.6" fill="currentColor"/></svg></a>
+      <a class="icon-link" href="https://vimeo.com/user251281384" target="_blank" rel="noopener" aria-label="Vimeo" title="Vimeo"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M23.9765 6.4168c-.105 2.338-1.739 5.5429-4.894 9.6088-3.2679 4.247-6.0258 6.3699-8.2898 6.3699-1.409 0-2.578-1.294-3.553-3.881l-1.9179-7.1138c-.719-2.584-1.488-3.878-2.312-3.878-.179 0-.806.378-1.8809 1.132l-1.129-1.457a315.06 315.06 0 003.501-3.1279c1.579-1.368 2.765-2.085 3.5539-2.159 1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.5069.5389 2.45 1.1309 3.674 1.7759 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.8679 3.434-5.7568 6.7619-5.6368 2.4729.06 3.6279 1.664 3.4929 4.7969z"/></svg></a>
+    </div>
+    </aside>
+  </div>
+</main>
+
+<script src="/js/nav.js?v=mu9zuekf"></script>
+<script src="/js/lightbox.js?v=mu9zuekf"></script>
+<script src="/js/cursor.js?v=mu9zuekf"></script>
+<script>
+  const form = document.getElementById("contactForm");
+  const status = document.getElementById("formStatus");
+  if (form && status) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      status.textContent = "Sending...";
+      try {
+        const response = await fetch(form.getAttribute("action"), {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        });
+        if (response.ok) {
+          form.reset();
+          status.textContent = "Thank you. Your message has been sent.";
+        } else {
+          status.textContent = "Something went wrong. Please try again or email me directly.";
+        }
+      } catch (error) {
+        status.textContent = "Something went wrong. Please try again or email me directly.";
+      }
+    });
+  }
+</script>
+</body>
+</html>
