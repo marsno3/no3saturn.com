@@ -486,6 +486,125 @@ body.home.past-hero .dropdown {
   color: var(--grey);
 }
 
+/* work overview: numbered staircase, 01 -> 02 -> 03 each one step lower and further right */
+.work-steps {
+  --step: clamp(48px, 8vw, 120px);
+  grid-template-columns: repeat(var(--cols, 3), 1fr);
+  gap: 36px;
+  padding-bottom: calc(var(--step) * 2);
+}
+.work-steps .work-item {
+  margin-top: calc(var(--n) * var(--step));
+}
+.step-head {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: 10px;
+  margin-bottom: 14px;
+}
+.step-head::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--dash);
+  transform-origin: left;
+  transition: background 0.4s;
+}
+.step-frame {
+  display: block;
+  overflow: hidden;
+}
+.step-no {
+  font-size: clamp(28px, 3.2vw, 46px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+}
+.work-steps .step-no {
+  display: inline-block;
+}
+.work-steps .thumb {
+  transition: opacity 0.4s, transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.work-steps .work-item:hover .step-head::before {
+  background: var(--ink);
+}
+/* later steps sit back until hovered, so the eye goes to 01 first */
+.work-steps .work-item:not(:first-child) .thumb {
+  opacity: 0.5;
+}
+.work-steps .work-item:not(:first-child) .work-meta .t,
+.work-steps .work-item:not(:first-child) .step-no {
+  color: var(--grey);
+}
+.work-steps .work-item:not(:first-child):hover .thumb {
+  opacity: 1;
+}
+.work-steps .work-item:not(:first-child):hover .work-meta .t,
+.work-steps .work-item:not(:first-child):hover .step-no {
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* on load the staircase builds itself: 01, then 02, then 03 */
+  .work-steps .step-head::before {
+    animation: step-line 1s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation-delay: calc(0.1s + var(--n) * 0.25s);
+  }
+  .work-steps .step-no {
+    animation: step-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation-delay: calc(0.2s + var(--n) * 0.25s);
+  }
+  .work-steps .step-frame {
+    animation: step-wipe 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation-delay: calc(0.3s + var(--n) * 0.25s);
+  }
+  .work-steps .thumb {
+    animation: step-settle 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation-delay: calc(0.3s + var(--n) * 0.25s);
+  }
+  .work-steps .work-meta {
+    animation: step-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation-delay: calc(0.9s + var(--n) * 0.25s);
+  }
+  /* hover: the picture slowly pushes in, the number nudges forward */
+  .work-steps .work-item:hover .thumb {
+    transform: scale(1.06);
+  }
+  .work-steps .step-no {
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.4s;
+  }
+  .work-steps .work-item:hover .step-no {
+    transform: translateX(8px);
+  }
+}
+@keyframes step-line {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes step-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+@keyframes step-wipe {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+@keyframes step-settle {
+  from {
+    transform: scale(1.18);
+  }
+}
+
 /* upcoming events */
 .events-list {
   max-width: 640px;
@@ -1013,6 +1132,14 @@ html.has-cursor video {
   }
   .grid {
     grid-template-columns: 1fr;
+  }
+  .work-steps {
+    gap: 28px;
+    padding-bottom: 0;
+  }
+  .work-steps .work-item {
+    margin-top: 0;
+    margin-left: calc(var(--n) * 9vw);
   }
   .project-info {
     grid-template-columns: 1fr;
