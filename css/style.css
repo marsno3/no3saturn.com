@@ -746,6 +746,97 @@ body.home.past-hero .dropdown {
   font-weight: 600;
 }
 
+/* about: motion. The hidden starting states only apply when about.js is running (html.js-about). */
+.about-layout .prose .w {
+  color: #c9c9c9;
+  transition: color 0.7s ease;
+}
+.about-layout .prose .w.on {
+  color: var(--ink);
+}
+.cv-items li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 7px;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cv-main {
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) {
+  .cv-items li:hover .cv-main {
+    transform: translateX(8px);
+  }
+  .cv-items li:hover::after {
+    transform: scaleX(1);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* photo: wipes up on load, then drifts a little slower than the page while scrolling (about.js sets --sy) */
+  .about-photo-frame {
+    animation: step-wipe 1.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation-delay: 0.1s;
+  }
+  .about-photo {
+    animation: step-settle 2.2s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation-delay: 0.1s;
+  }
+  .js-about .about-photo {
+    transform: translate3d(0, calc(var(--sy, 0) * 1px), 0) scale(1.12);
+  }
+  /* experience / education: each group draws its line, then its name and rows rise in one after another */
+  .js-about .cv-group::before {
+    transform: scaleX(0);
+    transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .js-about .cv-group.in::before {
+    transform: none;
+  }
+  .js-about .cv-group-name,
+  .js-about .cv-items li,
+  .js-about .cv-section .page-title {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .js-about .cv-section .page-title.in,
+  .js-about .cv-group.in .cv-group-name {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.15s;
+  }
+  .js-about .cv-group.in .cv-items li {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.25s + var(--k, 0) * 0.08s);
+  }
+  /* What I Do: the two lines slide in from the left, the second later and from further away */
+  .js-about .about-block-title,
+  .js-about .about-block p {
+    opacity: 0;
+    transform: translateX(-24px);
+    transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1), transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .js-about .about-block p + p {
+    transform: translateX(-48px);
+  }
+  .js-about .about-block.in .about-block-title,
+  .js-about .about-block.in p {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.1s;
+  }
+  .js-about .about-block.in p + p {
+    transition-delay: 0.32s;
+  }
+}
+
 /* upcoming events */
 .events-list {
   max-width: 640px;
@@ -1019,9 +1110,14 @@ body.home.past-hero .dropdown {
 .about-layout.no-photo {
   display: block;
 }
-.about-photo {
+.about-photo-frame {
   flex: 0 0 38%;
   max-width: 460px;
+  width: 100%;
+  overflow: hidden;
+}
+.about-photo {
+  display: block;
   width: 100%;
 }
 .about-layout .prose {
@@ -1053,15 +1149,31 @@ body.home.past-hero .dropdown {
   margin-top: 96px;
 }
 .cv-list {
+  --dash-line: repeating-linear-gradient(90deg, var(--dash) 0 3px, transparent 3px 6px);
   max-width: 980px;
-  border-top: 1px dashed var(--dash);
+}
+.cv-list::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: var(--dash-line);
 }
 .cv-group {
+  position: relative;
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
   column-gap: 24px;
   padding: 24px 0 8px;
-  border-bottom: 1px dashed var(--dash);
+}
+.cv-group::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--dash-line);
+  transform-origin: left;
 }
 .cv-group-name {
   padding-top: 3px;
@@ -1074,6 +1186,7 @@ body.home.past-hero .dropdown {
   list-style: none;
 }
 .cv-items li {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
